@@ -1,12 +1,8 @@
-// Button.stories.js
-
 import React from "react";
-
-import { text } from "@storybook/addon-knobs";
 
 import { storiesOf } from "@storybook/react-native";
 
-import { View, Alert } from "react-native";
+import { View } from "react-native";
 import { SunMoonSwitch } from "../../../src";
 
 storiesOf("Sample Button", module)
