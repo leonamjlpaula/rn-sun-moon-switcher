@@ -1,20 +1,28 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+
+const HEIGHT = 60;
+const WIDTH = 200;
 
 const styles = StyleSheet.create({
   container: {
-    width: 200,
-    height: 60,
+    width: WIDTH,
+    height: HEIGHT,
     alignItems: "center",
     backgroundColor: "#777",
+    borderRadius: HEIGHT / 2,
   },
 });
 
 const SunMoonSwitch = () => {
+  const [isDay, setIsDay] = useState(true);
+
   return (
-    <View style={styles.container}>
-      <Text>Test</Text>
-    </View>
+    <Pressable onPress={() => setIsDay((p) => !p)}>
+      <View style={styles.container}>
+        <Text>Test</Text>
+      </View>
+    </Pressable>
   );
 };
 
