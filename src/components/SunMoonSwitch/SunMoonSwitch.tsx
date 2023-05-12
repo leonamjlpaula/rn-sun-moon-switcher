@@ -1,33 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Pressable } from "react-native";
-import { withTiming, useSharedValue, Easing } from "react-native-reanimated";
+import { StyleSheet, Pressable } from "react-native";
+import Animated, {
+  withTiming,
+  useSharedValue,
+  Easing,
+  useAnimatedStyle,
+  interpolateColor,
+} from "react-native-reanimated";
 import { Clouds } from "./clouds";
 import { LightOverlay, NUMBER_OF_LIGHT_OVERLAYS } from "./lightOverlay";
-import { BORDER_WIDTH, HEIGHT, WIDTH } from "./constants";
+import {
+  BORDER_WIDTH,
+  DAY_BACKGROUND,
+  HEIGHT,
+  NIGHT_BACKGROUND,
+  WIDTH,
+} from "./constants";
 import { SunMoon } from "./sunMoon";
-
-const dayBackground = "#3686ef";
-const nightBackground = "#333";
 
 const styles = StyleSheet.create({
   container: {
     width: WIDTH,
     height: HEIGHT,
     alignItems: "center",
-    backgroundColor: dayBackground,
     borderRadius: HEIGHT / 2,
     overflow: "hidden",
     borderWidth: BORDER_WIDTH,
     borderColor: "#AAA",
-  },
-  sun: {
-    position: "absolute",
-    height: HEIGHT * 0.8,
-    width: HEIGHT * 0.8,
-    borderRadius: (HEIGHT * 0.8) / 2,
-    left: HEIGHT * 0.1,
-    top: (HEIGHT - HEIGHT * 0.8) / 2 - BORDER_WIDTH / 2,
-    backgroundColor: "#f7cd36",
   },
 });
 
@@ -45,9 +44,17 @@ const SunMoonSwitch = () => {
     else transition.value = withTiming(1, timingConfig);
   }, [isDay]);
 
+  const backgroundAnimation = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(
+      transition.value,
+      [0, 1],
+      [DAY_BACKGROUND, NIGHT_BACKGROUND]
+    ),
+  }));
+
   return (
     <Pressable onPress={() => setIsDay((p) => !p)}>
-      <View style={styles.container}>
+      <Animated.View style={[styles.container, backgroundAnimation]}>
         <Clouds transition={transition} />
         {new Array(NUMBER_OF_LIGHT_OVERLAYS).fill(0).map((_, i) => (
           <LightOverlay
@@ -59,7 +66,7 @@ const SunMoonSwitch = () => {
           />
         ))}
         <SunMoon transition={transition} />
-      </View>
+      </Animated.View>
     </Pressable>
   );
 };

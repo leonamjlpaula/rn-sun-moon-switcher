@@ -2,9 +2,11 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import Animated, {
   interpolate,
+  interpolateColor,
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { BORDER_WIDTH, HEIGHT, WIDTH } from "./constants";
+import { Circle } from "./circle";
 
 const styles = StyleSheet.create({
   sun: {
@@ -14,7 +16,9 @@ const styles = StyleSheet.create({
     borderRadius: (HEIGHT * 0.8) / 2,
     left: HEIGHT * 0.1,
     top: (HEIGHT - HEIGHT * 0.8) / 2 - BORDER_WIDTH,
-    backgroundColor: "#f7cd36",
+  },
+  cratersContainer: {
+    flex: 1,
   },
 });
 
@@ -30,8 +34,25 @@ export const SunMoon = ({ transition }) => {
           ),
         },
       ],
+      backgroundColor: interpolateColor(
+        transition.value,
+        [0, 1],
+        ["#f7cd36", "#DDD"]
+      ),
     };
   });
 
-  return <Animated.View style={[styles.sun, sunTranslateStyle]} />;
+  const cratersAnimationStyle = useAnimatedStyle(() => ({
+    opacity: transition.value,
+  }));
+
+  return (
+    <Animated.View style={[styles.sun, sunTranslateStyle]}>
+      <Animated.View style={[styles.cratersContainer, cratersAnimationStyle]}>
+        <Circle bottom={10} left={6} radius={10} backgroundColor="#AAA" />
+        <Circle bottom={8} left={28} radius={6} backgroundColor="#AAA" />
+        <Circle bottom={34} left={20} radius={4} backgroundColor="#AAA" />
+      </Animated.View>
+    </Animated.View>
+  );
 };
