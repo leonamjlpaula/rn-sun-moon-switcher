@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Pressable } from "react-native";
 import Animated, {
-  withSpring,
   withTiming,
   useSharedValue,
   useAnimatedStyle,
   interpolate,
-  Extrapolate,
   Easing,
 } from "react-native-reanimated";
-import { Cloud1 } from "./cloud1";
-import { Cloud2 } from "./cloud2";
+import { Clouds } from "./clouds";
 
 const HEIGHT = 60;
 const WIDTH = 180;
@@ -138,8 +135,7 @@ const SunMoonSwitch = () => {
   return (
     <Pressable onPress={() => setIsDay((p) => !p)}>
       <View style={styles.container}>
-        <Cloud2 />
-        <Cloud1 />
+        <Clouds transition={transition} />
         <Animated.View style={[styles.overlay1, overlayTranslateStyle1]} />
         <Animated.View style={[styles.overlay2, overlayTranslateStyle2]} />
         <Animated.View style={[styles.overlay3, overlayTranslateStyle3]} />
