@@ -9,6 +9,8 @@ import Animated, {
   Extrapolate,
   Easing,
 } from "react-native-reanimated";
+import { Cloud1 } from "./cloud1";
+import { Cloud2 } from "./cloud2";
 
 const HEIGHT = 60;
 const WIDTH = 180;
@@ -25,6 +27,8 @@ const styles = StyleSheet.create({
     backgroundColor: dayBackground,
     borderRadius: HEIGHT / 2,
     overflow: "hidden",
+    borderWidth: 2,
+    borderColor: "#AAA",
   },
   overlay1: {
     position: "absolute",
@@ -134,6 +138,8 @@ const SunMoonSwitch = () => {
   return (
     <Pressable onPress={() => setIsDay((p) => !p)}>
       <View style={styles.container}>
+        <Cloud2 />
+        <Cloud1 />
         <Animated.View style={[styles.overlay1, overlayTranslateStyle1]} />
         <Animated.View style={[styles.overlay2, overlayTranslateStyle2]} />
         <Animated.View style={[styles.overlay3, overlayTranslateStyle3]} />
