@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Pressable } from "react-native";
-import Animated, {
-  withTiming,
-  useSharedValue,
-  useAnimatedStyle,
-  interpolate,
-  Easing,
-} from "react-native-reanimated";
+import { withTiming, useSharedValue, Easing } from "react-native-reanimated";
 import { Clouds } from "./clouds";
+import { LightOverlay, NUMBER_OF_LIGHT_OVERLAYS } from "./lightOverlay";
+import { BORDER_WIDTH, HEIGHT, WIDTH } from "./constants";
+import { SunMoon } from "./sunMoon";
 
-const HEIGHT = 60;
-const WIDTH = 180;
-
-const transparency = "#FFF2";
 const dayBackground = "#3686ef";
 const nightBackground = "#333";
 
@@ -24,49 +17,22 @@ const styles = StyleSheet.create({
     backgroundColor: dayBackground,
     borderRadius: HEIGHT / 2,
     overflow: "hidden",
-    borderWidth: 2,
+    borderWidth: BORDER_WIDTH,
     borderColor: "#AAA",
-  },
-  overlay1: {
-    position: "absolute",
-    height: WIDTH * 0.8,
-    width: WIDTH * 0.8,
-    borderRadius: (WIDTH * 0.8) / 2,
-    left: 0,
-    top: -(WIDTH * 0.8) / 2 + HEIGHT / 2,
-    backgroundColor: transparency,
-  },
-  overlay2: {
-    position: "absolute",
-    height: WIDTH * 0.65,
-    width: WIDTH * 0.65,
-    borderRadius: (WIDTH * 0.65) / 2,
-    left: 0,
-    top: -(WIDTH * 0.65) / 2 + HEIGHT / 2,
-    backgroundColor: transparency,
-  },
-  overlay3: {
-    position: "absolute",
-    height: WIDTH * 0.5,
-    width: WIDTH * 0.5,
-    borderRadius: (WIDTH * 0.5) / 2,
-    left: 0,
-    top: -(WIDTH * 0.5) / 2 + HEIGHT / 2,
-    backgroundColor: transparency,
   },
   sun: {
     position: "absolute",
     height: HEIGHT * 0.8,
     width: HEIGHT * 0.8,
     borderRadius: (HEIGHT * 0.8) / 2,
-    left: 12,
-    top: -(HEIGHT * 0.8) / 2 + HEIGHT / 2,
+    left: HEIGHT * 0.1,
+    top: (HEIGHT - HEIGHT * 0.8) / 2 - BORDER_WIDTH,
     backgroundColor: "#f7cd36",
   },
 });
 
 const timingConfig = {
-  duration: 1000,
+  duration: 2000,
   easing: Easing.inOut(Easing.cubic),
 };
 
@@ -79,67 +45,20 @@ const SunMoonSwitch = () => {
     else transition.value = withTiming(1, timingConfig);
   }, [isDay]);
 
-  const overlayTranslateStyle1 = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX: interpolate(
-            transition.value,
-            [0, 1],
-            [0, WIDTH - WIDTH * 0.8]
-          ),
-        },
-      ],
-    };
-  });
-  const overlayTranslateStyle2 = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX: interpolate(
-            transition.value,
-            [0, 1],
-            [0, WIDTH - WIDTH * 0.65]
-          ),
-        },
-      ],
-    };
-  });
-  const overlayTranslateStyle3 = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX: interpolate(
-            transition.value,
-            [0, 1],
-            [0, WIDTH - WIDTH * 0.5]
-          ),
-        },
-      ],
-    };
-  });
-  const sunTranslateStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX: interpolate(
-            transition.value,
-            [0, 1],
-            [0, WIDTH - 24 - HEIGHT * 0.8]
-          ),
-        },
-      ],
-    };
-  });
-
   return (
     <Pressable onPress={() => setIsDay((p) => !p)}>
       <View style={styles.container}>
         <Clouds transition={transition} />
-        <Animated.View style={[styles.overlay1, overlayTranslateStyle1]} />
-        <Animated.View style={[styles.overlay2, overlayTranslateStyle2]} />
-        <Animated.View style={[styles.overlay3, overlayTranslateStyle3]} />
-        <Animated.View style={[styles.sun, sunTranslateStyle]} />
+        {new Array(NUMBER_OF_LIGHT_OVERLAYS).fill(0).map((_, i) => (
+          <LightOverlay
+            key={i}
+            index={i}
+            transition={transition}
+            width={WIDTH}
+            height={HEIGHT}
+          />
+        ))}
+        <SunMoon transition={transition} />
       </View>
     </Pressable>
   );
