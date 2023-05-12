@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     width: HEIGHT * 0.8,
     borderRadius: (HEIGHT * 0.8) / 2,
     left: HEIGHT * 0.1,
-    top: (HEIGHT - HEIGHT * 0.8) / 2 - BORDER_WIDTH,
+    top: (HEIGHT - HEIGHT * 0.8) / 2 - BORDER_WIDTH / 2,
     backgroundColor: "#f7cd36",
   },
 });
