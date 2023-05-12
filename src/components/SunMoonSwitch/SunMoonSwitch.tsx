@@ -1,8 +1,17 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Pressable } from "react-native";
+import Animated, {
+  withSpring,
+  withTiming,
+  useSharedValue,
+  useAnimatedStyle,
+  interpolate,
+  Extrapolate,
+  Easing,
+} from "react-native-reanimated";
 
 const HEIGHT = 60;
-const WIDTH = 200;
+const WIDTH = 180;
 
 const transparency = "#FFF2";
 const dayBackground = "#3686ef";
@@ -15,6 +24,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: dayBackground,
     borderRadius: HEIGHT / 2,
+    overflow: "hidden",
   },
   overlay1: {
     position: "absolute",
@@ -27,20 +37,20 @@ const styles = StyleSheet.create({
   },
   overlay2: {
     position: "absolute",
-    height: WIDTH * 0.6,
-    width: WIDTH * 0.6,
-    borderRadius: (WIDTH * 0.6) / 2,
+    height: WIDTH * 0.65,
+    width: WIDTH * 0.65,
+    borderRadius: (WIDTH * 0.65) / 2,
     left: 0,
-    top: -(WIDTH * 0.6) / 2 + HEIGHT / 2,
+    top: -(WIDTH * 0.65) / 2 + HEIGHT / 2,
     backgroundColor: transparency,
   },
   overlay3: {
     position: "absolute",
-    height: WIDTH * 0.4,
-    width: WIDTH * 0.4,
-    borderRadius: (WIDTH * 0.4) / 2,
+    height: WIDTH * 0.5,
+    width: WIDTH * 0.5,
+    borderRadius: (WIDTH * 0.5) / 2,
     left: 0,
-    top: -(WIDTH * 0.4) / 2 + HEIGHT / 2,
+    top: -(WIDTH * 0.5) / 2 + HEIGHT / 2,
     backgroundColor: transparency,
   },
   sun: {
@@ -54,16 +64,80 @@ const styles = StyleSheet.create({
   },
 });
 
+const timingConfig = {
+  duration: 1000,
+  easing: Easing.inOut(Easing.cubic),
+};
+
 const SunMoonSwitch = () => {
   const [isDay, setIsDay] = useState(true);
+  const transition = useSharedValue(0);
+
+  useEffect(() => {
+    if (isDay) transition.value = withTiming(0, timingConfig);
+    else transition.value = withTiming(1, timingConfig);
+  }, [isDay]);
+
+  const overlayTranslateStyle1 = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: interpolate(
+            transition.value,
+            [0, 1],
+            [0, WIDTH - WIDTH * 0.8]
+          ),
+        },
+      ],
+    };
+  });
+  const overlayTranslateStyle2 = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: interpolate(
+            transition.value,
+            [0, 1],
+            [0, WIDTH - WIDTH * 0.65]
+          ),
+        },
+      ],
+    };
+  });
+  const overlayTranslateStyle3 = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: interpolate(
+            transition.value,
+            [0, 1],
+            [0, WIDTH - WIDTH * 0.5]
+          ),
+        },
+      ],
+    };
+  });
+  const sunTranslateStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: interpolate(
+            transition.value,
+            [0, 1],
+            [0, WIDTH - 24 - HEIGHT * 0.8]
+          ),
+        },
+      ],
+    };
+  });
 
   return (
     <Pressable onPress={() => setIsDay((p) => !p)}>
       <View style={styles.container}>
-        <View style={styles.overlay1} />
-        <View style={styles.overlay2} />
-        <View style={styles.overlay3} />
-        <View style={styles.sun} />
+        <Animated.View style={[styles.overlay1, overlayTranslateStyle1]} />
+        <Animated.View style={[styles.overlay2, overlayTranslateStyle2]} />
+        <Animated.View style={[styles.overlay3, overlayTranslateStyle3]} />
+        <Animated.View style={[styles.sun, sunTranslateStyle]} />
       </View>
     </Pressable>
   );
