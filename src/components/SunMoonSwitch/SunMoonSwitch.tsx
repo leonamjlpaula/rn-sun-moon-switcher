@@ -6,6 +6,7 @@ import Animated, {
   Easing,
   useAnimatedStyle,
   interpolateColor,
+  interpolate,
 } from "react-native-reanimated";
 import { Clouds } from "./clouds";
 import {
@@ -16,6 +17,7 @@ import {
   WIDTH,
 } from "./constants";
 import { SunMoon } from "./sunMoon";
+import { Star } from "./star";
 
 const styles = StyleSheet.create({
   container: {
@@ -26,6 +28,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: BORDER_WIDTH,
     borderColor: "#AAA",
+  },
+  starsContainer: {
+    position: "absolute",
+    width: WIDTH,
+    height: HEIGHT,
   },
 });
 
@@ -51,9 +58,22 @@ const SunMoonSwitch = () => {
     ),
   }));
 
+  const scaleAnimation = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: interpolate(transition.value, [0, 1], [-HEIGHT, 0]) },
+    ],
+  }));
+
   return (
     <Pressable onPress={() => setIsDay((p) => !p)}>
       <Animated.View style={[styles.container, backgroundAnimation]}>
+        <Animated.View style={[styles.starsContainer, scaleAnimation]}>
+          <Star size={12} top={20} left={36} transition={transition} />
+          <Star size={5} top={10} left={28} transition={transition} />
+          <Star size={5} top={30} left={20} transition={transition} />
+          <Star size={5} top={40} left={50} transition={transition} />
+          <Star size={8} top={15} left={80} transition={transition} />
+        </Animated.View>
         <Clouds transition={transition} />
         <SunMoon transition={transition} />
       </Animated.View>
