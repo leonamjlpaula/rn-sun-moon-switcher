@@ -8,7 +8,6 @@ import Animated, {
   interpolateColor,
 } from "react-native-reanimated";
 import { Clouds } from "./clouds";
-import { LightOverlay, NUMBER_OF_LIGHT_OVERLAYS } from "./lightOverlay";
 import {
   BORDER_WIDTH,
   DAY_BACKGROUND,
@@ -56,15 +55,6 @@ const SunMoonSwitch = () => {
     <Pressable onPress={() => setIsDay((p) => !p)}>
       <Animated.View style={[styles.container, backgroundAnimation]}>
         <Clouds transition={transition} />
-        {new Array(NUMBER_OF_LIGHT_OVERLAYS).fill(0).map((_, i) => (
-          <LightOverlay
-            key={i}
-            index={i}
-            transition={transition}
-            width={WIDTH}
-            height={HEIGHT}
-          />
-        ))}
         <SunMoon transition={transition} />
       </Animated.View>
     </Pressable>
