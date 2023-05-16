@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 });
 
 const timingConfig = {
-  duration: 2000,
+  duration: 1500,
   easing: Easing.inOut(Easing.cubic),
 };
 
@@ -68,11 +68,36 @@ const SunMoonSwitch = () => {
     <Pressable onPress={() => setIsDay((p) => !p)}>
       <Animated.View style={[styles.container, backgroundAnimation]}>
         <Animated.View style={[styles.starsContainer, scaleAnimation]}>
-          <Star size={12} top={20} left={36} transition={transition} />
-          <Star size={5} top={10} left={28} transition={transition} />
-          <Star size={5} top={30} left={20} transition={transition} />
-          <Star size={5} top={40} left={50} transition={transition} />
-          <Star size={8} top={15} left={80} transition={transition} />
+          <Star
+            size={0.2 * HEIGHT}
+            top={0.33 * HEIGHT}
+            left={0.2 * WIDTH}
+            transition={transition}
+          />
+          <Star
+            size={0.083 * HEIGHT}
+            top={0.1667 * HEIGHT}
+            left={0.155 * WIDTH}
+            transition={transition}
+          />
+          <Star
+            size={0.083 * HEIGHT}
+            top={0.5 * HEIGHT}
+            left={0.278 * WIDTH}
+            transition={transition}
+          />
+          <Star
+            size={0.133 * HEIGHT}
+            top={0.667 * HEIGHT}
+            left={0.278 * WIDTH}
+            transition={transition}
+          />
+          <Star
+            size={0.133 * HEIGHT}
+            top={0.25 * HEIGHT}
+            left={0.444 * WIDTH}
+            transition={transition}
+          />
         </Animated.View>
         <Clouds transition={transition} />
         <SunMoon transition={transition} />
